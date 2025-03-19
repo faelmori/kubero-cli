@@ -18,6 +18,7 @@ import (
 	_ "github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
+	"net"
 	"os"
 	"path/filepath"
 	"sync"
@@ -169,6 +170,17 @@ func (k *KuberoClient) initConfig() error {
 			instance := k.configMgr.GetInstanceManager().GetCurrentInstance()
 			k.currentInstance = *instance
 		}
+	}
+
+	// Add internet connection check
+	_, err := net.Dial("tcp", "google.com:80")
+	if err != nil {
+		log.Error("No internet connection detected.", map[string]interface{}{
+			"context": "kubero-cli",
+			"action":  "initConfig",
+			"error":   err.Error(),
+		})
+		os.Exit(1)
 	}
 
 	return nil

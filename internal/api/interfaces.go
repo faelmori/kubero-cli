@@ -34,4 +34,7 @@ type ClientAPI interface {
 	GetRepositories() (*resty.Response, error)
 	GetContexts() (*resty.Response, error)
 	WithBody(body interface{}) *Client
+	HandleOAuth2JWTLogin(oauth2Config t.OAuth2JWTConfig) error
+	HandleUserRSALogin(userRSAConfig t.UserRSAConfig) error
+	HandleUserRSAPasswordLogin(userRSAPasswordConfig t.UserRSAPasswordConfig) error
 }
